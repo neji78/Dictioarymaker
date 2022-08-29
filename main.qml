@@ -11,7 +11,9 @@ Window {
     //search bar
     Rectangle {
         id: searchbar
-        anchors.centerIn: parent
+        anchors.left:add.right
+        anchors.top: add.top
+        anchors.leftMargin: 5
         TextField{
             id:searchtext
             placeholderText: qsTr("کلمه خود را وارد کنید");
@@ -22,22 +24,28 @@ Window {
             anchors.left: searchtext.right
             anchors.top: searchtext.top
             anchors.bottom: searchtext.bottom
+            anchors.leftMargin: 5
             Image {
                 id: searchicon
                 anchors.fill: parent
                 source: "/search.png"
             }
+            ScaleAnimator{
+                id:scale
+                target:searchui
+                to:1.1
+                duration: 200
+                running: false
+            }
+
             MouseArea{
                 anchors.fill: parent
                 hoverEnabled: true
-                onEntered: {
-
-                }
                 onClicked: {
-
+                    scale.start()
+                    console.log(searchtext.text)
                 }
             }
-
         }
     }
     //add button
@@ -45,59 +53,33 @@ Window {
         id:add
         width: 30
         height: 30
-        anchors.left: searchbar.right
-        anchors.top: searchbar.top
-        anchors.leftMargin: searchui.width + searchtext.width
         Image {
             id: pluse
             anchors.fill:parent
             source: "/add.png"
         }
+        ScaleAnimator{
+            id:scaleadd
+            target:pluse
+            to:1.1
+            duration: 200
+            running: false
+        }
         MouseArea{
             anchors.fill:parent
             hoverEnabled: true
-            onEntered: {
-                textopen.start()
-            }
-            onExited: {
-                textclose.start()
-            }
-
             onClicked: {
+                scaleadd.start()
 
             }
         }
     }
-    Rectangle{
-        id:addrec
-        anchors.left: add.right
-        anchors.top: add.top
-        anchors.bottom: add.bottom
-        width:0
-        PropertyAnimation{
-            id:textopen
-            target: addtext
-            property: "width"
-            to:100
-            duration: 200
-            running: false
-        }
-        PropertyAnimation{
-            id:textclose
-            target: addtext
-            property: "width"
-            to:0
-            duration: 200
-            running: false
-        }
-        Text{
-            id:addtext
-            anchors.left: parent.left
-            anchors.verticalCenter: parent.verticalCenter
-            text: "اضافه کردن"
-            onWidthChanged: {
-                visible = !(addtext.visible)
-            }
-        }
+
+    //table view section
+    TableView {
+        width: 200
+        height: width
+        anchors.centerIn: parent
+        clip: true
     }
 }
